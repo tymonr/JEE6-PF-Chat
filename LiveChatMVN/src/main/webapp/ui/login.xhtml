@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta
+		http-equiv="Content-Type"
+		content="text/html; charset=UTF-8" />
+	<title>LiveChat</title>
+	<h:outputStylesheet
+		library="css"
+		name="main.css" />
+</h:head>
+<h:body>
+
+	<h:form id="login">
+		<h:panelGrid columns="3">
+			<p:outputLabel
+				for="username"
+				value="Login:" />
+			<p:inputText
+				id="username"
+				required="true" />
+			<p:message for="username" />
+
+			<p:outputLabel
+				for="password"
+				value="Password:" />
+			<p:password
+				id="password"
+				required="true" />
+			<p:message for="username" />
+
+			<h:panelGroup />
+			<p:commandButton
+				process="@form"
+				update="@form"
+				ajax="false"
+				value="Login" />
+				
+			<h:panelGroup
+				styleClass="error"
+				rendered="#{facesContext.validationFailed}">
+				#{shiroLoginFailure}
+			</h:panelGroup>
+		</h:panelGrid>
+	</h:form>
+
+</h:body>
+</html>
