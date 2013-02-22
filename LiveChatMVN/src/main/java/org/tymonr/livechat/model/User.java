@@ -60,6 +60,15 @@ public class User extends BaseEntity{
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "other")
 	private Set<Contact> reverseContacts = new HashSet<Contact>();
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
+	private Set<Conversation> conversationsStarted = new HashSet<Conversation>();
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "receiver")
+	private Set<Conversation> conversationsReceived = new HashSet<Conversation>();
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
+	private Set<Message> messagesSent = new HashSet<Message>();
+	
 	public String getUsername() {
 		return username;
 	}
@@ -114,6 +123,30 @@ public class User extends BaseEntity{
 
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
+	}
+
+	public Set<Conversation> getConversationsStarted() {
+		return conversationsStarted;
+	}
+
+	public void setConversationsStarted(Set<Conversation> conversationsStarted) {
+		this.conversationsStarted = conversationsStarted;
+	}
+
+	public Set<Conversation> getConversationsReceived() {
+		return conversationsReceived;
+	}
+
+	public void setConversationsReceived(Set<Conversation> conversationsReceived) {
+		this.conversationsReceived = conversationsReceived;
+	}
+
+	public Set<Message> getMessagesSent() {
+		return messagesSent;
+	}
+
+	public void setMessagesSent(Set<Message> messagesSent) {
+		this.messagesSent = messagesSent;
 	}
 	
 	

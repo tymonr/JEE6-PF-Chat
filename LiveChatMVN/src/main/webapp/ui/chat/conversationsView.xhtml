@@ -17,7 +17,13 @@
 				id="public"
 				layout="block"
 				styleClass="ui-corner-all ui-widget-content message-panel">
-
+				
+				<ui:repeat var="message" value="#{chat.messages}">
+					<h:outputText styleClass="message-date" value="[#{chat.formatedDate(message.timeSent)}] " />
+					<h:outputText styleClass="message-author" value="#{message.author.username}: " />
+					<h:outputText styleClass="message-content" value="#{message.content}" />
+					<br />
+				</ui:repeat>
 			</p:outputPanel>
 		</p:tab>
 

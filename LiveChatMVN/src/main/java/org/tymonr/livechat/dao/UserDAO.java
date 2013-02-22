@@ -1,5 +1,6 @@
 package org.tymonr.livechat.dao;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang.StringUtils;
+import org.tymonr.livechat.model.Message;
 import org.tymonr.livechat.model.User;
 import org.tymonr.livechat.model.filter.UserFilter;
 
@@ -88,7 +90,6 @@ public class UserDAO extends BaseDAO{
 		jpql.append(" left join fetch c.other ");
 		jpql.append(" where u.username = :username ");
 		
-		
 		TypedQuery<User> query = entityManager.createQuery(jpql.toString(), User.class);
 		query.setParameter("username", username);
 		
@@ -97,6 +98,24 @@ public class UserDAO extends BaseDAO{
 		result = query.getSingleResult();
 		}catch(NoResultException nre){
 			// swallow on purpose
+		}
+		return result;
+	}
+
+	public List<Message> loadShoutboxMessages(int numberOfMessages) {
+		StringBuilder jpql = new StringBuilder("select m from " + Message.class.getCanonicalName() + " m ");
+		jpql.append("join fetch m.author ");
+		jpql.append("where m.conversation is null ");
+		jpql.append("order by m.timeSent desc ");
+		
+		TypedQuery<Message> query = entityManager.createQuery(jpql.toString(), Message.class);
+		query.setMaxResults(numberOfMessages);
+		
+		List<Message> result;
+		try{
+			result = query.getResultList();
+		}catch(NoResultException nre){
+			result = new ArrayList<Message>();
 		}
 		return result;
 	}

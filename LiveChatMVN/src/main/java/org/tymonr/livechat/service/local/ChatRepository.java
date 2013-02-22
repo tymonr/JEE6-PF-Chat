@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
+import org.tymonr.livechat.model.Message;
 import org.tymonr.livechat.model.User;
 import org.tymonr.livechat.model.filter.UserFilter;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -32,6 +33,10 @@ public class ChatRepository extends LocalService {
 		checkNotNull(username);
 		
 		return getUserDAO().userByUsername(username);
+	}
+
+	public List<Message> loadShoutboxMessages(int numberOfMessages) {
+		return getUserDAO().loadShoutboxMessages(numberOfMessages);
 	}
 
 }
