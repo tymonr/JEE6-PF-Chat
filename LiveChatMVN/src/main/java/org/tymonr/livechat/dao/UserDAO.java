@@ -11,6 +11,8 @@ import org.apache.commons.lang.StringUtils;
 import org.tymonr.livechat.model.User;
 import org.tymonr.livechat.model.filter.UserFilter;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /* TODO: 
  * switch to criteria api and hibernates query by example ? 
  * (JPA2 spec does cover query by example if I remember it right,
@@ -70,6 +72,31 @@ public class UserDAO extends BaseDAO{
 			 * just return empty immutable list.
 			 */
 			result = Collections.emptyList();
+		}
+		return result;
+	}
+
+	/**
+	 * Find user by username, pull associated lazy collections.
+	 * @param username
+	 * @return null if not found
+	 */
+	public User userByUsername(String username) {
+		checkNotNull(username);
+		StringBuilder jpql = new StringBuilder("select u from " + User.class.getCanonicalName() + " u ");
+		jpql.append(" left join fetch u.contacts c ");
+		jpql.append(" left join fetch c.other ");
+		jpql.append(" where u.username = :username ");
+		
+		
+		TypedQuery<User> query = entityManager.createQuery(jpql.toString(), User.class);
+		query.setParameter("username", username);
+		
+		User result = null;
+		try{
+		result = query.getSingleResult();
+		}catch(NoResultException nre){
+			// swallow on purpose
 		}
 		return result;
 	}

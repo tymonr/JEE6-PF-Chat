@@ -6,14 +6,12 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Contact implements Serializable{
+public class Contact extends BaseEntity implements Serializable{
 	private static final long serialVersionUID = 553111498777373987L;
 	
 	public Contact(){
@@ -22,10 +20,6 @@ public class Contact implements Serializable{
 	public Contact(User other){
 		this.other = other;
 	}
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER")
@@ -40,14 +34,6 @@ public class Contact implements Serializable{
 	
 	@Column(name = "CREATION_DATE")
 	private Date creationDate;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public User getUser() {
 		return user;

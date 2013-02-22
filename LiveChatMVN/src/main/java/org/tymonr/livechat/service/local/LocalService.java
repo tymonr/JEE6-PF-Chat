@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.tymonr.livechat.dao.UserDAO;
+import org.tymonr.livechat.model.BaseEntity;
 
 /**
  * Base class for stateless local services.
@@ -23,6 +24,22 @@ public abstract class LocalService {
 		}
 		return userDAO;
 	}
+	
+	public <T> void remove(T entity){
+		getUserDAO().remove(entity);
+	}
+	
+	public BaseEntity save(BaseEntity entity){
+		entity = getUserDAO().save(entity);
+		return entity;
+	}
+	
+	public <T> T find (Class<T> clazz, Object id){
+		return getUserDAO().find(clazz, id);
+	}
+	
+	
+	
 
 
 }

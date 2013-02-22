@@ -16,6 +16,7 @@
 		minWidth="900"
 		height="500"
 		minHeight="500"
+		dynamic="true"
 		widgetVar="searchForFriendsDlg">
 
 		<h:form id="fSearchForFriends">
@@ -65,6 +66,11 @@
 
 					<p:dataTable
 						id="dtSearchResults"
+						paginator="true"
+						rows="7"
+						paginatorAlwaysVisible="true"
+						paginatorPosition="bottom"
+						paginatorTemplate="{PreviousPageLink} {NextPageLink}"
 						value="#{friendsSearch.users}"
 						var="user">
 
@@ -83,6 +89,10 @@
 						<p:column>
 							<p:commandButton
 								icon="ui-icon-plusthick"
+								action="#{friendsSearch.addContact(user)}"
+								disabled="#{friendsSearch.isAlreadyAdded(user)}"
+								process="@this"
+								update="@form"
 								id="btnAddContact" />
 							<p:tooltip
 								for="btnAddContact"
@@ -103,6 +113,7 @@
 		minWidth="800"
 		height="350"
 		minHeight="350"
+		dynamic="true"
 		header="Options">
 
 		<p:tabView orientation="left">
@@ -132,6 +143,7 @@
 		minHeight="500"
 		width="700"
 		minWidth="700"
+		dynamic="true"
 		appendToBody="true">
 
 		<p:dataTable id="dtEditContacts">

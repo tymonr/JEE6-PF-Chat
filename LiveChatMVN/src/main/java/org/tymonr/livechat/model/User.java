@@ -1,6 +1,5 @@
 package org.tymonr.livechat.model;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,9 +8,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -19,7 +15,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "USERS")
 @NamedQuery(name="byUsername", query = "select u from User u where u.username = :username")
-public class User implements Serializable{
+public class User extends BaseEntity{
 	private static final long serialVersionUID = -7831583513796681576L;
 	
 	public User(){
@@ -29,9 +25,6 @@ public class User implements Serializable{
 		this.username = username;
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
 	
 	@Basic
 	@Column(name = "USERNAME")
@@ -58,14 +51,6 @@ public class User implements Serializable{
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "other")
 	private Set<Contact> reverseContacts = new HashSet<Contact>();
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getUsername() {
 		return username;

@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 
 import org.tymonr.livechat.model.User;
 import org.tymonr.livechat.model.filter.UserFilter;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 @Stateless
 public class ChatRepository extends LocalService {
@@ -25,6 +26,12 @@ public class ChatRepository extends LocalService {
 				maxResults);
 
 		return result;
+	}
+	
+	public User userByName(String username){
+		checkNotNull(username);
+		
+		return getUserDAO().userByUsername(username);
 	}
 
 }

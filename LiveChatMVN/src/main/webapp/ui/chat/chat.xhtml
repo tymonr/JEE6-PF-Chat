@@ -37,10 +37,15 @@
 		</p:layoutUnit>
 
 		<p:layoutUnit position="center">
-			<ui:include src="conversationsView.xhtml"/>
+			<p:growl
+				for="errorGrowl"
+				showDetail="false"
+				sticky="true"
+				autoUpdate="true" />
+			<ui:include src="conversationsView.xhtml" />
 		</p:layoutUnit>
 	</p:layout>
-	
+
 	<ui:include src="chatDialogs.xhtml" />
 
 </h:body>
