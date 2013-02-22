@@ -1,0 +1,6 @@
+
+
+
+  In the PF 3.4 user guide the server push example mentions p:push instead of p:socket !
+  contact PF guys to fix this 
+  

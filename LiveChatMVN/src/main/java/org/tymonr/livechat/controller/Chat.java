@@ -1,7 +1,9 @@
 package org.tymonr.livechat.controller;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -10,6 +12,8 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.push.PushContext;
+import org.primefaces.push.PushContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tymonr.livechat.exception.MessageHandler;
@@ -23,6 +27,7 @@ import org.tymonr.livechat.session.Loggedin;
 public class Chat implements Serializable{
 	private static final long serialVersionUID = 1358544872182255815L;
 	private static final Logger log = LoggerFactory.getLogger(Chat.class);
+	private static final SimpleDateFormat dateFormater = new SimpleDateFormat("HH:mm:ss");
 	
 	@Inject
 	@Loggedin
@@ -31,7 +36,7 @@ public class Chat implements Serializable{
 	@Inject
 	private ChatRepository chatRepository;
 	
-	
+	private String message;
 	
 	@PostConstruct
 	public void init(){
@@ -54,10 +59,45 @@ public class Chat implements Serializable{
 		return null;
 	}
 	
+	public String sendMessage(){
+		PushContext pushContext = PushContextFactory.getDefault().getPushContext();
+		Date date = new Date();
+		
+		pushContext.push("/chat", formatedMessage(date, message));
+		message = null;
+		
+		return null;
+	}
+	
+	private String formatedMessage(Date date, String message){
+		StringBuilder msg = new StringBuilder();
+		msg.append("<span class=\"message-date\">");
+		msg.append("["+dateFormater.format(date)+"] ");
+		msg.append("</span>");
+		
+		msg.append("<span class=\"message-author\">");
+		msg.append(user.getUsername());
+		msg.append("</span>");
+		msg.append(": ");
+		msg.append("<span class=\"message-content\">");
+		msg.append(message);
+		msg.append("</span>");
+		return msg.toString();
+	}
+	
 	public List<Contact> getContacts(){
 		return new ArrayList<Contact>(user.getContacts());
 	}
 
+	public String getMessage() {
+		return message;
+	}
 
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+
+	
 	
 }

@@ -18,6 +18,14 @@ import javax.persistence.Table;
 public class User extends BaseEntity{
 	private static final long serialVersionUID = -7831583513796681576L;
 	
+	/*
+	 * age
+	 * address[street, city, postalCode, ...]
+	 * email
+	 * phone
+	 * 
+	 */
+	
 	public User(){
 	}
 	

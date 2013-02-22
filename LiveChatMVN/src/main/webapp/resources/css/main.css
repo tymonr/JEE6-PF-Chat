@@ -7,3 +7,16 @@
 .message-input{
 	width: 500px;
 }
+
+.message-author{
+	font-weight: bold;
+}
+
+.message-content{
+	font-style: italic;
+}
+
+.message-date{
+	font-size: 0.8em;
+	color: gray;
+}

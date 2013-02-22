@@ -14,22 +14,9 @@
 			title="Shoutbox">
 
 			<p:outputPanel
+				id="public"
 				layout="block"
 				styleClass="ui-corner-all ui-widget-content message-panel">
-
-				<!-- TODO: In the PF 3.4 user guide the example mentions p:push instead of p:socket !
-				contact PF guys to fix this -->
-				<h:form>
-					<h:outputText
-						value="#{counter.count}"
-						styleClass="display" />
-					<p:commandButton
-						value="Click"
-						actionListener="#{counter.increment}" />
-				</h:form>
-				<p:socket
-					onMessage="handleMessage"
-					channel="/counter" />
 
 			</p:outputPanel>
 		</p:tab>
@@ -49,19 +36,34 @@
 		</p:tab>
 	</p:tabView>
 
-	<p:inputText
-		id="itMessage"
-		styleClass="message-input">
-	</p:inputText>
-	<p:commandButton
-		id="btnSendMessage"
-		value="Send"
-		icon="ui-icon-seek-next">
-	</p:commandButton>
+	<h:form>
+		<p:inputText
+			id="itMessage"
+			value="#{chat.message}"
+			styleClass="message-input">
+		</p:inputText>
+		<p:commandButton
+			id="btnSendMessage"
+			process="@this itMessage"
+			update="@this itMessage"
+			action="#{chat.sendMessage}"
+			value="Send"
+			icon="ui-icon-seek-next">
+		</p:commandButton>
+	</h:form>
+
+	<p:socket
+		channel="/chat"
+		onMessage="handleMessage"
+		widgetVar="subscriber" />
 
 	<script type="text/javascript">
 		function handleMessage(data) {
-			$('.display').html(data);
+			var chatContent = $(PrimeFaces
+					.escapeClientId('tvConversations:public'));
+			chatContent.append(data + '<br />');
+
+			chatContent.scrollTop(chatContent.height());
 		}
 	</script>
 
