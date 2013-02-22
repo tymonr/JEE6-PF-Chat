@@ -12,64 +12,86 @@
 	<p:dialog
 		id="searchForFriendsDialog"
 		header="Search for friends"
-		modal="true"
-		appendToBody="true"
 		width="900"
 		minWidth="900"
 		height="500"
 		minHeight="500"
 		widgetVar="searchForFriendsDlg">
 
-		<p:layout style="min-width:850px;min-height:500px;">
-			<p:layoutUnit
-				position="west"
-				resizable="true"
-				size="400">
-				<h:panelGrid columns="2">
-					<p:outputLabel
-						for="itUsername"
-						value="Nick:" />
-					<p:inputText id="itUsername" />
+		<h:form id="fSearchForFriends">
 
-					<p:outputLabel
-						for="itFirstname"
-						value="First name:" />
-					<p:inputText id="itFirstname" />
+			<p:layout style="min-width:850px;min-height:500px;">
+				<p:layoutUnit
+					position="west"
+					resizable="true"
+					size="400">
+					<h:panelGrid
+						columns="2"
+						id="pSearchFilters">
+						<p:outputLabel
+							for="itUsername"
+							value="Nick:" />
+						<p:inputText
+							id="itUsername"
+							value="#{friendsSearch.filter.username}" />
 
-					<p:outputLabel
-						for="itLastname"
-						value="Last name:" />
-					<p:inputText id="itLastname" />
-				</h:panelGrid>
-			</p:layoutUnit>
+						<p:outputLabel
+							for="itFirstname"
+							value="First name:" />
+						<p:inputText
+							id="itFirstname"
+							value="#{friendsSearch.filter.firstname}" />
 
-			<p:layoutUnit
-				position="center"
-				resizable="true"
-				size="450">
+						<p:outputLabel
+							for="itLastname"
+							value="Last name:" />
+						<p:inputText
+							id="itLastname"
+							value="#{friendsSearch.filter.lastname}" />
+					</h:panelGrid>
 
-				<p:dataTable id="dtSearchResults">
+					<p:commandButton
+						id="btnSearch"
+						value="Search"
+						action="#{friendsSearch.search}"
+						update="dtSearchResults"
+						process="@this pSearchFilters" />
+				</p:layoutUnit>
 
-					<p:column headerText="Nick">
+				<p:layoutUnit
+					position="center"
+					resizable="true"
+					size="450">
+
+					<p:dataTable
+						id="dtSearchResults"
+						value="#{friendsSearch.users}"
+						var="user">
+
+						<p:column headerText="Nick">
+						#{user.username}
 					</p:column>
 
-					<p:column headerText="First Name">
+						<p:column headerText="First Name">
+						#{user.firstname}
 					</p:column>
 
-					<p:column headerText="Last Name">
+						<p:column headerText="Last Name">
+						#{user.lastname}
 					</p:column>
 
-					<p:column>
-						<p:commandButton
-							icon="ui-icon-plusthick"
-							id="btnAddContact" />
-						<p:tooltip
-							for="btnAddContact"
-							value="Add this user to your conntacts list" />
-					</p:column>
-				</p:dataTable>
-			</p:layoutUnit>
-		</p:layout>
+						<p:column>
+							<p:commandButton
+								icon="ui-icon-plusthick"
+								id="btnAddContact" />
+							<p:tooltip
+								for="btnAddContact"
+								value="Add this user to your conntacts list" />
+						</p:column>
+					</p:dataTable>
+				</p:layoutUnit>
+			</p:layout>
+		</h:form>
 	</p:dialog>
 
 	<p:dialog
@@ -130,7 +152,7 @@
 				<p:tooltip
 					for="btnRemoveContact"
 					value="Remove this user from your conntacts list" />
-					
+
 				<p:commandButton
 					id="btnBlockContact"
 					icon="ui-icon-circle-close" />

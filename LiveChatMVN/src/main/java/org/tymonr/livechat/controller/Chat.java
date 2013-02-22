@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
@@ -21,7 +22,12 @@ public class Chat implements Serializable{
 	
 	@PostConstruct
 	public void init(){
-		log.debug("Chat bean - init");
+		log.trace("Chat bean - initialized");
+	}
+	
+	@PreDestroy
+	public void dispose(){
+		log.trace("Chat bean - disposed");
 	}
 	
 	public List<Contact> getContacts(){

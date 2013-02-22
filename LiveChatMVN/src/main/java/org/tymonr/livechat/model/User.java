@@ -18,7 +18,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "USERS")
-@NamedQuery(name="findUser", query = "select u from User u where u.username = :username")
+@NamedQuery(name="byUsername", query = "select u from User u where u.username = :username")
 public class User implements Serializable{
 	private static final long serialVersionUID = -7831583513796681576L;
 	
@@ -36,9 +36,19 @@ public class User implements Serializable{
 	@Basic
 	@Column(name = "USERNAME")
 	private String username;
+	
+	/* TODO: hash */
 	@Basic
 	@Column(name = "PASSWORD")
 	private String password;
+	
+	@Basic
+	@Column(name = "FIRSTNAME")
+	private String firstname;
+	
+	@Basic
+	@Column(name = "LASTNAME")
+	private String lastname;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch= FetchType.EAGER)
 	private Set<Role> roles = new HashSet<Role>();
@@ -95,6 +105,22 @@ public class User implements Serializable{
 
 	public void setReverseContacts(Set<Contact> reverseContacts) {
 		this.reverseContacts = reverseContacts;
+	}
+
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 	
 	
