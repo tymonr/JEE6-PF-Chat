@@ -1,24 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" 
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
-    xmlns:ui="http://java.sun.com/jsf/facelets" 
-    xmlns:p="http://primefaces.org/ui">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta
+		http-equiv="Content-Type"
+		content="text/html; charset=UTF-8" />
+	<title>LiveChat</title>
+	<h:outputStylesheet
+		library="css"
+		name="main.css" />
+</h:head>
 <h:body>
-    <ui:composition template="/templates/template.xhtml">
-        <ui:define name="content">
-        
-			<p>
-				chat
-			</p>
-			
-			<h:form>
-				<p:commandButton 
-					action="#{logout.submit}"
-					value="button"/>
-			</h:form>
-       		
-        </ui:define>
-    </ui:composition>
+	<p:layout fullPage="true">
+		<ui:remove>
+			<p:layoutUnit
+				position="north"
+				size="75">
+			north
+		</p:layoutUnit>
+			<p:layoutUnit
+				position="south"
+				size="75">
+			south
+		</p:layoutUnit>
+
+		</ui:remove>
+		<p:layoutUnit
+			position="west"
+			size="200">
+			<ui:include src="contactsList.xhtml" />
+			<ui:include src="sideMenu.xhtml" />
+		</p:layoutUnit>
+
+		<p:layoutUnit position="center">
+			<ui:include src="conversationsView.xhtml"/>
+		</p:layoutUnit>
+	</p:layout>
+	
+	<ui:include src="chatDialogs.xhtml" />
+
 </h:body>
 </html>

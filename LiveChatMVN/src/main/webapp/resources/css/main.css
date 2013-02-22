@@ -1,0 +1,9 @@
+.message-panel{
+	height: 200px;
+	overflow: auto;
+	padding: 0.5em;
+}
+
+.message-input{
+	width: 500px;
+}

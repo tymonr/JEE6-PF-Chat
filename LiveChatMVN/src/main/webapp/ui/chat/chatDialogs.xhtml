@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+
+	<p:dialog
+		id="searchForFriendsDialog"
+		header="Search for friends"
+		modal="true"
+		appendToBody="true"
+		width="900"
+		minWidth="900"
+		height="500"
+		minHeight="500"
+		widgetVar="searchForFriendsDlg">
+
+		<p:layout style="min-width:850px;min-height:500px;">
+			<p:layoutUnit
+				position="west"
+				resizable="true"
+				size="400">
+				<h:panelGrid columns="2">
+					<p:outputLabel
+						for="itUsername"
+						value="Nick:" />
+					<p:inputText id="itUsername" />
+
+					<p:outputLabel
+						for="itFirstname"
+						value="First name:" />
+					<p:inputText id="itFirstname" />
+
+					<p:outputLabel
+						for="itLastname"
+						value="Last name:" />
+					<p:inputText id="itLastname" />
+				</h:panelGrid>
+			</p:layoutUnit>
+
+			<p:layoutUnit
+				position="center"
+				resizable="true"
+				size="450">
+
+				<p:dataTable id="dtSearchResults">
+
+					<p:column headerText="Nick">
+					</p:column>
+
+					<p:column headerText="First Name">
+					</p:column>
+
+					<p:column headerText="Last Name">
+					</p:column>
+
+					<p:column>
+						<p:commandButton
+							icon="ui-icon-plusthick"
+							id="btnAddContact" />
+						<p:tooltip
+							for="btnAddContact"
+							value="Add this user to your conntacts list" />
+					</p:column>
+				</p:dataTable>
+			</p:layoutUnit>
+		</p:layout>
+	</p:dialog>
+
+	<p:dialog
+		id="dOptions"
+		widgetVar="optionsDlg"
+		modal="true"
+		appendToBody="true"
+		width="800"
+		minWidth="800"
+		height="350"
+		minHeight="350"
+		header="Options">
+
+		<p:tabView orientation="left">
+
+			<p:tab title="Personal">
+				username...
+			</p:tab>
+
+			<p:tab title="Security">
+				sec...
+			</p:tab>
+
+			<p:tab title="Visual">
+				vis...
+			</p:tab>
+
+		</p:tabView>
+
+	</p:dialog>
+
+	<p:dialog
+		id="dEditContacts"
+		widgetVar="editContactsDlg"
+		modal="true"
+		header="Friends list"
+		height="500"
+		minHeight="500"
+		width="700"
+		minWidth="700"
+		appendToBody="true">
+
+		<p:dataTable id="dtEditContacts">
+
+			<p:column headerText="Nick">
+			</p:column>
+
+			<p:column headerText="First Name">
+			</p:column>
+
+			<p:column headerText="Last Name">
+			</p:column>
+
+			<p:column>
+				<p:commandButton
+					icon="ui-icon-minusthick"
+					id="btnRemoveContact" />
+				<p:tooltip
+					for="btnRemoveContact"
+					value="Remove this user from your conntacts list" />
+					
+				<p:commandButton
+					id="btnBlockContact"
+					icon="ui-icon-circle-close" />
+				<p:tooltip
+					for="btnBlockContact"
+					value="Block this user (you will not receive messages from this user)" />
+			</p:column>
+		</p:dataTable>
+	</p:dialog>
+
+
+</h:body>
+</html>

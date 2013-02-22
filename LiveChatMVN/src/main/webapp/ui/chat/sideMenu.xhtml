@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+	<h:form>
+		<h:panelGrid columns="2">
+			<h:panelGroup>
+				<p:commandButton
+					id="btnLogout"
+					action="#{logout.submit}"
+					icon="ui-icon-power" />
+				<p:tooltip
+					for="btnLogout"
+					value="Logout" />
+
+				<p:commandButton
+					id="btnOptions"
+					oncomplete="optionsDlg.show()"
+					icon="ui-icon-wrench" />
+				<p:tooltip
+					for="btnOptions"
+					value="Options" />
+
+				<p:commandButton
+					id="btnSearch"
+					oncomplete="searchForFriendsDlg.show()"
+					icon="ui-icon-search" />
+				<p:tooltip
+					for="btnSearch"
+					value="Search for friends" />
+
+				<p:commandButton
+					id="btnEditContacts"
+					oncomplete="editContactsDlg.show()"
+					icon="ui-icon-person" />
+				<p:tooltip
+					for="btnEditContacts"
+					value="Edit friends list" />
+			</h:panelGroup>
+
+		</h:panelGrid>
+	</h:form>
+</h:body>
+</html>

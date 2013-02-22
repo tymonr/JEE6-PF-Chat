@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:body>
+	<p:tabView id="tvConversations">
+		<p:tab
+			id="tShoutbox"
+			title="Shoutbox">
+
+			<p:outputPanel
+				layout="block"
+				styleClass="ui-corner-all ui-widget-content message-panel">
+			</p:outputPanel>
+		</p:tab>
+
+		<p:tab
+			id="tOne"
+			closable="true"
+			title="One">
+			one
+		</p:tab>
+
+		<p:tab
+			id="tTwo"
+			closable="true"
+			title="Two">
+			two
+		</p:tab>
+	</p:tabView>
+
+	<p:inputText
+		id="itMessage"
+		styleClass="message-input">
+	</p:inputText>
+	<p:commandButton
+		id="btnSendMessage"
+		value="Send"
+		icon="ui-icon-seek-next">
+	</p:commandButton>
+
+</h:body>
+</html>
