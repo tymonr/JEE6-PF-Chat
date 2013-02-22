@@ -92,7 +92,7 @@
 								action="#{friendsSearch.addContact(user)}"
 								disabled="#{friendsSearch.isAlreadyAdded(user)}"
 								process="@this"
-								update="@form"
+								update="@form :pFriendsList"
 								id="btnAddContact" />
 							<p:tooltip
 								for="btnAddContact"

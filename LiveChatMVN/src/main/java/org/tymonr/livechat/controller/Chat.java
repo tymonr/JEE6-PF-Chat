@@ -7,18 +7,24 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tymonr.livechat.model.Contact;
 import org.tymonr.livechat.model.User;
+import org.tymonr.livechat.session.Loggedin;
 
 @Named
 @SessionScoped
 public class Chat implements Serializable{
 	private static final long serialVersionUID = 1358544872182255815L;
 	private static final Logger log = LoggerFactory.getLogger(Chat.class);
+	
+	@Inject
+	@Loggedin
+	private User user;
 	
 	@PostConstruct
 	public void init(){
@@ -31,11 +37,7 @@ public class Chat implements Serializable{
 	}
 	
 	public List<Contact> getContacts(){
-		List<Contact> contacts = new ArrayList<Contact>();
-		contacts.add(new Contact(new User("Alice")));
-		contacts.add(new Contact(new User("Bob")));
-		
-		return contacts;
+		return new ArrayList<Contact>(user.getContacts());
 	}
 
 }

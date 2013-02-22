@@ -22,6 +22,7 @@ public class Session implements Serializable{
 	private User user;
 	
 	@Produces
+	@Named("loggedinUser")
 	@Loggedin
 	public User getLoggedinUser(){
 		if(user == null){
