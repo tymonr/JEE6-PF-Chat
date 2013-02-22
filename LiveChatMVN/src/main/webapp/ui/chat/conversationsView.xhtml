@@ -16,6 +16,21 @@
 			<p:outputPanel
 				layout="block"
 				styleClass="ui-corner-all ui-widget-content message-panel">
+
+				<!-- TODO: In the PF 3.4 user guide the example mentions p:push instead of p:socket !
+				contact PF guys to fix this -->
+				<h:form>
+					<h:outputText
+						value="#{chat.count}"
+						styleClass="display" />
+					<p:commandButton
+						value="Click"
+						actionListener="#{chat.increment}" />
+				</h:form>
+				<p:socket
+					onMessage="handleMessage"
+					channel="/counter" />
+
 			</p:outputPanel>
 		</p:tab>
 
@@ -43,6 +58,12 @@
 		value="Send"
 		icon="ui-icon-seek-next">
 	</p:commandButton>
+
+	<script type="text/javascript">
+		function handleMessage(data) {
+			$('.display').html(data);
+		}
+	</script>
 
 </h:body>
 </html>

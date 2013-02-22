@@ -84,6 +84,13 @@
 			<version>1.2.1</version>
 		</dependency>
 
+		<!-- server push -->
+		<dependency>
+			<groupId>org.atmosphere</groupId>
+			<artifactId>atmosphere-runtime</artifactId>
+			<version>1.0.0.RC1</version>
+		</dependency>
+
 		<!-- utils -->
 		<dependency>
 			<groupId>com.google.guava</groupId>

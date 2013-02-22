@@ -1,0 +1,27 @@
+from standalone.xml JBoss 7.1.1
+
+...
+
+                <datasource jta="true" jndi-name="java:/jdbc/livechat" pool-name="livechat" enabled="true" use-ccm="false">
+                    <connection-url>jdbc:mysql://localhost/livechat</connection-url>
+                    <driver-class>com.mysql.jdbc.Driver</driver-class>
+                    <driver>mysql-connector-java-5.1.20-bin.jar</driver>
+                    <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+                    <security>
+                        <user-name>root</user-name>
+                        <password>1234</password>
+                    </security>
+                    <validation>
+                        <validate-on-match>false</validate-on-match>
+                        <background-validation>false</background-validation>
+                    </validation>
+                    <statement>
+                        <share-prepared-statements>true</share-prepared-statements>
+                    </statement>
+                </datasource>
+
+...
+
+<subsystem xmlns="urn:jboss:domain:web:1.1" default-virtual-server="default-host" native="true">
+
+...
