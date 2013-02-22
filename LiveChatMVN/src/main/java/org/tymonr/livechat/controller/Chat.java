@@ -10,8 +10,6 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.primefaces.push.PushContext;
-import org.primefaces.push.PushContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tymonr.livechat.exception.MessageHandler;
@@ -34,7 +32,6 @@ public class Chat implements Serializable{
 	private ChatRepository chatRepository;
 	
 	
-	private int count;
 	
 	@PostConstruct
 	public void init(){
@@ -46,12 +43,6 @@ public class Chat implements Serializable{
 		log.trace("Chat bean - disposed");
 	}
 	
-	public synchronized void increment(){
-		count ++;
-		
-		PushContext pushContext = PushContextFactory.getDefault().getPushContext();
-		pushContext.push("/counter", String.valueOf(count));
-	}
 	
 	public String removeContact(Contact contact){
 		try{
@@ -67,13 +58,6 @@ public class Chat implements Serializable{
 		return new ArrayList<Contact>(user.getContacts());
 	}
 
-	public int getCount() {
-		return count;
-	}
-
-	public void setCount(int count) {
-		this.count = count;
-	}
 
 	
 }
