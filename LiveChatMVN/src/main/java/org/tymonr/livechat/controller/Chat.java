@@ -12,6 +12,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.primefaces.push.PushContext;
 import org.primefaces.push.PushContextFactory;
 import org.slf4j.Logger;
@@ -70,6 +71,8 @@ public class Chat implements Serializable{
 	}
 	
 	private String formatedMessage(Date date, String message){
+		String escapedMessage = StringEscapeUtils.escapeHtml(message);
+		
 		StringBuilder msg = new StringBuilder();
 		msg.append("<span class=\"message-date\">");
 		msg.append("["+dateFormater.format(date)+"] ");
@@ -80,7 +83,7 @@ public class Chat implements Serializable{
 		msg.append("</span>");
 		msg.append(": ");
 		msg.append("<span class=\"message-content\">");
-		msg.append(message);
+		msg.append(escapedMessage);
 		msg.append("</span>");
 		return msg.toString();
 	}
