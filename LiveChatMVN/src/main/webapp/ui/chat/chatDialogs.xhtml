@@ -146,33 +146,48 @@
 		dynamic="true"
 		appendToBody="true">
 
-		<p:dataTable id="dtEditContacts">
+		<h:form>
 
-			<p:column headerText="Nick">
+			<p:dataTable
+				id="dtEditContacts"
+				value="#{chat.contacts}"
+				var="contact">
+
+				<p:column headerText="Nick">
+				#{contact.other.username}
 			</p:column>
 
-			<p:column headerText="First Name">
+				<p:column headerText="First Name">
+				#{contact.other.firstname}
 			</p:column>
 
-			<p:column headerText="Last Name">
+				<p:column headerText="Last Name">
+				#{contact.other.lastname}
 			</p:column>
 
-			<p:column>
-				<p:commandButton
-					icon="ui-icon-minusthick"
-					id="btnRemoveContact" />
-				<p:tooltip
-					for="btnRemoveContact"
-					value="Remove this user from your conntacts list" />
+				<p:column>
+					<p:commandButton
+						icon="ui-icon-minusthick"
+						action="#{chat.removeContact(contact)}"
+						process="@this"
+						update="@form :pFriendsList"
+						id="btnRemoveContact" />
+					<p:tooltip
+						for="btnRemoveContact"
+						value="Remove this user from your conntacts list" />
 
-				<p:commandButton
-					id="btnBlockContact"
-					icon="ui-icon-circle-close" />
-				<p:tooltip
-					for="btnBlockContact"
-					value="Block this user (you will not receive messages from this user)" />
-			</p:column>
-		</p:dataTable>
+					<ui:remove>
+						<!-- TODO -->
+						<p:commandButton
+							id="btnBlockContact"
+							icon="ui-icon-circle-close" />
+						<p:tooltip
+							for="btnBlockContact"
+							value="Block this user (you will not receive messages from this user)" />
+					</ui:remove>
+				</p:column>
+			</p:dataTable>
+		</h:form>
 	</p:dialog>
 
 

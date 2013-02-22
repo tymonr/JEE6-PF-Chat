@@ -12,8 +12,10 @@ import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tymonr.livechat.exception.MessageHandler;
 import org.tymonr.livechat.model.Contact;
 import org.tymonr.livechat.model.User;
+import org.tymonr.livechat.service.local.ChatRepository;
 import org.tymonr.livechat.session.Loggedin;
 
 @Named
@@ -26,6 +28,9 @@ public class Chat implements Serializable{
 	@Loggedin
 	private User user;
 	
+	@Inject
+	private ChatRepository chatRepository;
+	
 	@PostConstruct
 	public void init(){
 		log.trace("Chat bean - initialized");
@@ -34,6 +39,16 @@ public class Chat implements Serializable{
 	@PreDestroy
 	public void dispose(){
 		log.trace("Chat bean - disposed");
+	}
+	
+	public String removeContact(Contact contact){
+		try{
+			chatRepository.remove(contact);
+			user.getContacts().remove(contact);
+		}catch(Exception e){
+			MessageHandler.error("Error while removing contact", e);
+		}
+		return null;
 	}
 	
 	public List<Contact> getContacts(){

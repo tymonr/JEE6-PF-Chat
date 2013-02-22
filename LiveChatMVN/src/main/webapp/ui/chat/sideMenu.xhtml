@@ -36,6 +36,8 @@
 
 				<p:commandButton
 					id="btnEditContacts"
+					process="@this"
+					update=":dEditContacts"
 					oncomplete="editContactsDlg.show()"
 					icon="ui-icon-person" />
 				<p:tooltip
