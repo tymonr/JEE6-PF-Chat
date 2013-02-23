@@ -8,7 +8,17 @@
 
 <h:body>
 	<h:form>
-		<h:panelGrid columns="2">
+		<h:panelGrid columns="1">
+
+			<h:panelGroup styleClass="ui-corner-all ui-widget-content status-panel">
+				<p:inplace editor="true">
+					<p:ajax event="save" listener="#{chat.statusChanged}"/>
+					<p:inputText
+						value="#{chat.status}"
+						required="true" />
+				</p:inplace>
+			</h:panelGroup>
+
 			<h:panelGroup>
 				<p:commandButton
 					id="btnLogout"

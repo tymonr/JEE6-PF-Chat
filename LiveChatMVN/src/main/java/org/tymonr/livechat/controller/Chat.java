@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.TabCloseEvent;
 import org.primefaces.push.PushContext;
@@ -92,9 +93,17 @@ public class Chat implements Serializable {
 
 	private Map<Conversation, List<Message>> conversationMessageMap;
 
+	/** Status of loggedin user */
+	private String status;
+
 	@PostConstruct
 	public void init() {
 		loadConversations();
+		if (StringUtils.isBlank(user.getStatus())) {
+			status = "Online";
+		} else {
+			status = user.getStatus();
+		}
 		log.trace("Chat bean - initialized");
 	}
 
@@ -206,6 +215,24 @@ public class Chat implements Serializable {
 		log.debug("switching active conversation to " + activeConversation);
 	}
 
+	public void statusChanged() {
+		log.debug("Status was changed to: " + status);
+		try {
+			user.setStatus(status);
+			chatRepository.save(user);
+
+			StringBuilder message = new StringBuilder("0 ");
+			message.append("<span class=\"message-status\">");
+			message.append(user.getUsername());
+			message.append(" changed status to \"");
+			message.append(status + '"');
+			message.append("</span>");
+			pushContext.push(DEFAULT_CHANNEL, message.toString());
+		} catch (Exception e) {
+			MessageHandler.error("Error while changing status", e);
+		}
+	}
+
 	/* helper methods */
 
 	public List<Message> messagesOfConversation(Conversation conversation) {
@@ -290,6 +317,14 @@ public class Chat implements Serializable {
 
 	public void setConversations(List<Conversation> conversations) {
 		this.conversations = conversations;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

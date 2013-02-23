@@ -21,8 +21,18 @@
 	color: gray;
 }
 
+.message-status{
+	font-size: 0.8em;
+	color: gray;
+}
+
 .login-controls{
 	margin-left: auto;
 	margin-right: auto;
 	padding-top: 5em;
+}
+
+.status-panel{
+	padding: 0.5em;
+	display: block;
 }

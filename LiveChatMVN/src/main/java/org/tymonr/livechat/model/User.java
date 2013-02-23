@@ -14,61 +14,61 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "USERS")
-@NamedQuery(name="byUsername", query = "select u from User u where u.username = :username")
-public class User extends BaseEntity{
+@NamedQuery(name = "byUsername",
+		query = "select u from User u where u.username = :username")
+public class User extends BaseEntity {
 	private static final long serialVersionUID = -7831583513796681576L;
-	
+
 	/*
-	 * age
-	 * address[street, city, postalCode, ...]
-	 * email
-	 * phone
-	 * 
+	 * age address[street, city, postalCode, ...] email phone
 	 */
-	
-	public User(){
+
+	public User() {
 	}
-	
-	public User(String username){
+
+	public User(String username) {
 		this.username = username;
 	}
 
-	
 	@Basic
 	@Column(name = "USERNAME")
 	private String username;
-	
+
 	/* TODO: hash */
 	@Basic
 	@Column(name = "PASSWORD")
 	private String password;
-	
+
 	@Basic
 	@Column(name = "FIRSTNAME")
 	private String firstname;
-	
+
 	@Basic
 	@Column(name = "LASTNAME")
 	private String lastname;
-	
-	@OneToMany(cascade = CascadeType.ALL, fetch= FetchType.EAGER)
+
+	@Basic
+	@Column(name = "STATUS")
+	private String status;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Role> roles = new HashSet<Role>();
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<Contact> contacts = new HashSet<Contact>();
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "other")
 	private Set<Contact> reverseContacts = new HashSet<Contact>();
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
 	private Set<Conversation> conversationsStarted = new HashSet<Conversation>();
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "receiver")
 	private Set<Conversation> conversationsReceived = new HashSet<Conversation>();
-	
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
 	private Set<Message> messagesSent = new HashSet<Message>();
-	
+
 	public String getUsername() {
 		return username;
 	}
@@ -148,8 +148,13 @@ public class User extends BaseEntity{
 	public void setMessagesSent(Set<Message> messagesSent) {
 		this.messagesSent = messagesSent;
 	}
-	
-	
-	
-	
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 }
