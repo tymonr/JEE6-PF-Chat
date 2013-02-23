@@ -22,10 +22,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * so we would have to lock to one provider... or build some facade
  * around it as all major providers support QBE. ~tymonr) */
 /**
- *  User DAO
+ * User DAO
  */
-public class UserDAO extends BaseDAO{
-	
+public class UserDAO extends BaseDAO {
+
 	public UserDAO(EntityManager entityManager) {
 		super(entityManager);
 	}
@@ -38,41 +38,46 @@ public class UserDAO extends BaseDAO{
 	 * @param maxResults
 	 * @return
 	 */
-	public List<User> findUsers(UserFilter filter, int startIndex, int maxResults){
-		StringBuilder jpql = new StringBuilder("select u from " + User.class.getCanonicalName()+ " u ");
-		if(filter != null){
+	public List<User> findUsers(UserFilter filter, int startIndex,
+			int maxResults) {
+		StringBuilder jpql = new StringBuilder("select u from "
+				+ User.class.getCanonicalName() + " u ");
+		if (filter != null) {
 			jpql.append("where 1=1 ");
-			if(!StringUtils.isBlank(filter.getUsername())){
+			if (!StringUtils.isBlank(filter.getUsername())) {
 				jpql.append("and lower(u.username) like  :username ");
 			}
-			if(!StringUtils.isBlank(filter.getFirstname())){
+			if (!StringUtils.isBlank(filter.getFirstname())) {
 				jpql.append("and lower(u.firstname) like :firstname ");
 			}
-			if(!StringUtils.isBlank(filter.getLastname())){
+			if (!StringUtils.isBlank(filter.getLastname())) {
 				jpql.append("and lower(u.lastname) like :lastname ");
 			}
 		}
-		TypedQuery<User> query = entityManager.createQuery(jpql.toString(), User.class);
-		if(filter != null){
-			if(!StringUtils.isBlank(filter.getUsername())){
+		TypedQuery<User> query = entityManager.createQuery(jpql.toString(),
+				User.class);
+		if (filter != null) {
+			if (!StringUtils.isBlank(filter.getUsername())) {
 				query.setParameter("username", lowerLike(filter.getUsername()));
 			}
-			if(!StringUtils.isBlank(filter.getFirstname())){
-				query.setParameter("firstname", lowerLike(filter.getFirstname()));
+			if (!StringUtils.isBlank(filter.getFirstname())) {
+				query.setParameter("firstname",
+						lowerLike(filter.getFirstname()));
 			}
-			if(!StringUtils.isBlank(filter.getLastname())){
+			if (!StringUtils.isBlank(filter.getLastname())) {
 				query.setParameter("lastname", lowerLike(filter.getLastname()));
 			}
 		}
 		query.setFirstResult(startIndex);
 		query.setMaxResults(maxResults);
-		
+
 		List<User> result;
-		try{
+		try {
 			result = query.getResultList();
-		}catch(NoResultException nre){
-			/* don't propagate JPA NRE exception up the stack,
-			 * just return empty immutable list.
+		} catch (NoResultException nre) {
+			/*
+			 * don't propagate JPA NRE exception up the stack, just return empty
+			 * immutable list.
 			 */
 			result = Collections.emptyList();
 		}
@@ -81,41 +86,46 @@ public class UserDAO extends BaseDAO{
 
 	/**
 	 * Find user by username, pull associated lazy collections.
+	 * 
 	 * @param username
 	 * @return null if not found
 	 */
 	public User userByUsername(String username) {
 		checkNotNull(username);
-		StringBuilder jpql = new StringBuilder("select u from " + User.class.getCanonicalName() + " u ");
+		StringBuilder jpql = new StringBuilder("select u from "
+				+ User.class.getCanonicalName() + " u ");
 		jpql.append(" left join fetch u.contacts c ");
 		jpql.append(" left join fetch c.other ");
 		jpql.append(" where u.username = :username ");
-		
-		TypedQuery<User> query = entityManager.createQuery(jpql.toString(), User.class);
+
+		TypedQuery<User> query = entityManager.createQuery(jpql.toString(),
+				User.class);
 		query.setParameter("username", username);
-		
+
 		User result = null;
-		try{
-		result = query.getSingleResult();
-		}catch(NoResultException nre){
+		try {
+			result = query.getSingleResult();
+		} catch (NoResultException nre) {
 			// swallow on purpose
 		}
 		return result;
 	}
 
 	public List<Message> loadShoutboxMessages(int numberOfMessages) {
-		StringBuilder jpql = new StringBuilder("select m from " + Message.class.getCanonicalName() + " m ");
+		StringBuilder jpql = new StringBuilder("select m from "
+				+ Message.class.getCanonicalName() + " m ");
 		jpql.append("join fetch m.author ");
 		jpql.append("where m.conversation is null ");
 		jpql.append("order by m.timeSent desc ");
-		
-		TypedQuery<Message> query = entityManager.createQuery(jpql.toString(), Message.class);
+
+		TypedQuery<Message> query = entityManager.createQuery(jpql.toString(),
+				Message.class);
 		query.setMaxResults(numberOfMessages);
-		
+
 		List<Message> result;
-		try{
+		try {
 			result = query.getResultList();
-		}catch(NoResultException nre){
+		} catch (NoResultException nre) {
 			result = new ArrayList<Message>();
 		}
 		return result;
@@ -123,20 +133,22 @@ public class UserDAO extends BaseDAO{
 
 	public List<Conversation> loadActiveConversations(User user) {
 		checkNotNull(user);
-		StringBuilder jpql = new StringBuilder("select c from " + Conversation.class.getCanonicalName() + " c ");
+		StringBuilder jpql = new StringBuilder("select c from "
+				+ Conversation.class.getCanonicalName() + " c ");
 		jpql.append("join fetch c.owner o ");
 		jpql.append("join fetch c.receiver r ");
 		jpql.append("where (o = :user or r = :user) ");
 		jpql.append("and c.timeEnded is null ");
-		jpql.append("order by c.timeStarted desc "); 
-		
-		TypedQuery<Conversation> query = entityManager.createQuery(jpql.toString(), Conversation.class);
+		jpql.append("order by c.timeStarted desc ");
+
+		TypedQuery<Conversation> query = entityManager.createQuery(
+				jpql.toString(), Conversation.class);
 		query.setParameter("user", user);
-		
+
 		List<Conversation> result;
-		try{
+		try {
 			result = query.getResultList();
-		}catch(NoResultException nre){
+		} catch (NoResultException nre) {
 			result = new ArrayList<Conversation>();
 		}
 		return result;
@@ -145,30 +157,31 @@ public class UserDAO extends BaseDAO{
 	public List<Message> loadConversationMessages(Conversation conversation,
 			int numberOfMessages) {
 		checkNotNull(conversation);
-		
-		StringBuilder jpql = new StringBuilder("select m from " + Message.class.getCanonicalName() + " m ");
+
+		StringBuilder jpql = new StringBuilder("select m from "
+				+ Message.class.getCanonicalName() + " m ");
 		jpql.append("join fetch m.author ");
-		if(conversation.getId() == null){
+		if (conversation.getId() == null) {
 			jpql.append("where m.conversation is null ");
-		}else{
+		} else {
 			jpql.append("where m.conversation = :conversation ");
 		}
 		jpql.append("order by m.timeSent desc ");
-		
-		TypedQuery<Message> query = entityManager.createQuery(jpql.toString(), Message.class);
-		if(conversation.getId() != null){
+
+		TypedQuery<Message> query = entityManager.createQuery(jpql.toString(),
+				Message.class);
+		if (conversation.getId() != null) {
 			query.setParameter("conversation", conversation);
 		}
 		query.setMaxResults(numberOfMessages);
-		
+
 		List<Message> result;
-		try{
+		try {
 			result = query.getResultList();
-		}catch(NoResultException nre){
+		} catch (NoResultException nre) {
 			result = new ArrayList<Message>();
 		}
 		return result;
 	}
-	
-	
+
 }

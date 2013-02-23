@@ -13,20 +13,18 @@ import static com.google.common.base.Preconditions.checkNotNull;
 @Stateless
 public class ChatRepository extends LocalService {
 
+	/**
+	 * Search for users with query by example filter
+	 * 
+	 * @param filter
+	 * @param startIndex
+	 * @param maxResults
+	 * @return
+	 */
 	public List<User> findUsers(UserFilter filter, int startIndex,
 			int maxResults) {
-
-		/**
-		 * Search for users with query by example filter
-		 * 
-		 * @param filter
-		 * @param startIndex
-		 * @param maxResults
-		 * @return
-		 */
 		List<User> result = getUserDAO().findUsers(filter, startIndex,
 				maxResults);
-
 		return result;
 	}
 
@@ -50,7 +48,8 @@ public class ChatRepository extends LocalService {
 	 * conversation set) will be pulled instead.
 	 * 
 	 * @param conversation
-	 * @param numberOfMessages maximum number of messages to load.
+	 * @param numberOfMessages
+	 *            maximum number of messages to load.
 	 * @return
 	 */
 	public List<Message> loadConversationMessages(Conversation conversation,

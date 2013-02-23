@@ -13,28 +13,28 @@ import org.tymonr.livechat.service.local.ChatRepository;
 
 @Named
 @SessionScoped
-public class Session implements Serializable{
+public class Session implements Serializable {
 	private static final long serialVersionUID = -1261077126537768750L;
-	
+
 	@Inject
 	private ChatRepository chatRepository;
-	
+
 	private User user;
-	
+
 	@Produces
 	@Named("loggedinUser")
 	@Loggedin
-	public User getLoggedinUser(){
-		if(user == null){
+	public User getLoggedinUser() {
+		if (user == null) {
 			loadUser();
 		}
 		return user;
 	}
-	
-	private void loadUser(){
+
+	private void loadUser() {
 		String username = (String) SecurityUtils.getSubject().getPrincipal();
 		user = chatRepository.userByName(username);
-		if(user == null){
+		if (user == null) {
 			throw new IllegalStateException("Can't load loggedin user data");
 		}
 	}

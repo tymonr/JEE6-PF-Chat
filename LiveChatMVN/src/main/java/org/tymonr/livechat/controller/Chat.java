@@ -38,7 +38,8 @@ import org.tymonr.livechat.session.Loggedin;
 @SessionScoped
 public class Chat implements Serializable {
 	private static final long serialVersionUID = 1358544872182255815L;
-	private static final Logger log = LoggerFactory.getLogger(Chat.class);
+	private static final Logger log = LoggerFactory
+			.getLogger(Chat.class);
 
 	/**
 	 * Maximum number of messages to pull for each active conversation when the
@@ -63,7 +64,7 @@ public class Chat implements Serializable {
 
 	/** List of active conversations for loggedin user */
 	private List<Conversation> conversations;
-	
+
 	/** Conversation that is currently selected and visible */
 	private Conversation activeConversation;
 
@@ -84,10 +85,10 @@ public class Chat implements Serializable {
 			Collections.reverse(list);
 			conversationMessageMap.put(conversation, list);
 		}
-		
+
 		log.trace("Chat bean - initialized");
 	}
-	
+
 	@PreDestroy
 	public void dispose() {
 		log.trace("Chat bean - disposed");
@@ -138,7 +139,6 @@ public class Chat implements Serializable {
 		return null;
 	}
 
-
 	public String startConversation(Contact contact) {
 		try {
 			log.debug("Starting conversation with "
@@ -155,7 +155,7 @@ public class Chat implements Serializable {
 		}
 		return null;
 	}
-	
+
 	/* event handlers */
 
 	public void endConversation(TabCloseEvent event) {
@@ -173,12 +173,13 @@ public class Chat implements Serializable {
 		activeConversation = (Conversation) event.getData();
 		log.debug("switching active conversation to " + activeConversation);
 	}
-	
+
 	/* helper methods */
 
 	public List<Message> messagesOfConversation(Conversation conversation) {
 		return conversationMessageMap.get(conversation);
 	}
+
 	public String conversationTitle(Conversation conversation) {
 		if (conversation.getId() == null) {
 			return SHOUTBOX;
@@ -191,6 +192,7 @@ public class Chat implements Serializable {
 		}
 		return title;
 	}
+
 	public boolean isTabClosable(Conversation conversation) {
 		if (conversation.getId() == null) {
 			return false;
@@ -235,7 +237,7 @@ public class Chat implements Serializable {
 			MessageHandler.error("Error while loading active conversations", e);
 		}
 	}
-	
+
 	/* get / set */
 
 	public List<Contact> getContacts() {

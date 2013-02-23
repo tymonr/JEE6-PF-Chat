@@ -28,7 +28,7 @@ public class FriendsSearch implements Serializable {
 
 	@Inject
 	private ChatRepository chatRepository;
-	
+
 	@Inject
 	@Loggedin
 	private User user;
@@ -46,29 +46,29 @@ public class FriendsSearch implements Serializable {
 		}
 		return null;
 	}
-	
-	public String addContact(User other){
-		try{
+
+	public String addContact(User other) {
+		try {
 			Contact contact = new Contact();
 			contact.setCreationDate(new Date());
 			contact.setUser(user);
 			contact.setOther(other);
 			contact = (Contact) chatRepository.save(contact);
 			user.getContacts().add(contact);
-		}catch(Exception e){
+		} catch (Exception e) {
 			MessageHandler.error("Error occurred while adding a contact", e);
 		}
 		return null;
 	}
-	
-	public boolean isAlreadyAdded(User other){
-		if(user.getId().equals(other.getId())){
+
+	public boolean isAlreadyAdded(User other) {
+		if (user.getId().equals(other.getId())) {
 			/* loggedin user can see himself on the list but can't add */
 			return true;
 		}
 		boolean ret = false;
-		for(Contact contact : user.getContacts()){
-			if(contact.getOther().getId().equals(other.getId())){
+		for (Contact contact : user.getContacts()) {
+			if (contact.getOther().getId().equals(other.getId())) {
 				ret = true;
 				break;
 			}
