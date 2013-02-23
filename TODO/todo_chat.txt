@@ -1,0 +1,3 @@
+prevent opening multiple conversations to the same friend
+
+split private chats to different channels

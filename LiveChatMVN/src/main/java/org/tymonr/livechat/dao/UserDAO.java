@@ -9,6 +9,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang.StringUtils;
+import org.tymonr.livechat.model.Conversation;
 import org.tymonr.livechat.model.Message;
 import org.tymonr.livechat.model.User;
 import org.tymonr.livechat.model.filter.UserFilter;
@@ -109,6 +110,55 @@ public class UserDAO extends BaseDAO{
 		jpql.append("order by m.timeSent desc ");
 		
 		TypedQuery<Message> query = entityManager.createQuery(jpql.toString(), Message.class);
+		query.setMaxResults(numberOfMessages);
+		
+		List<Message> result;
+		try{
+			result = query.getResultList();
+		}catch(NoResultException nre){
+			result = new ArrayList<Message>();
+		}
+		return result;
+	}
+
+	public List<Conversation> loadActiveConversations(User user) {
+		checkNotNull(user);
+		StringBuilder jpql = new StringBuilder("select c from " + Conversation.class.getCanonicalName() + " c ");
+		jpql.append("join fetch c.owner o ");
+		jpql.append("join fetch c.receiver r ");
+		jpql.append("where (o = :user or r = :user) ");
+		jpql.append("and c.timeEnded is null ");
+		jpql.append("order by c.timeStarted desc "); 
+		
+		TypedQuery<Conversation> query = entityManager.createQuery(jpql.toString(), Conversation.class);
+		query.setParameter("user", user);
+		
+		List<Conversation> result;
+		try{
+			result = query.getResultList();
+		}catch(NoResultException nre){
+			result = new ArrayList<Conversation>();
+		}
+		return result;
+	}
+
+	public List<Message> loadConversationMessages(Conversation conversation,
+			int numberOfMessages) {
+		checkNotNull(conversation);
+		
+		StringBuilder jpql = new StringBuilder("select m from " + Message.class.getCanonicalName() + " m ");
+		jpql.append("join fetch m.author ");
+		if(conversation.getId() == null){
+			jpql.append("where m.conversation is null ");
+		}else{
+			jpql.append("where m.conversation = :conversation ");
+		}
+		jpql.append("order by m.timeSent desc ");
+		
+		TypedQuery<Message> query = entityManager.createQuery(jpql.toString(), Message.class);
+		if(conversation.getId() != null){
+			query.setParameter("conversation", conversation);
+		}
 		query.setMaxResults(numberOfMessages);
 		
 		List<Message> result;

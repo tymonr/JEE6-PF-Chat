@@ -1,0 +1,3 @@
+String externalization, internationalization
+
+minify html & JS code

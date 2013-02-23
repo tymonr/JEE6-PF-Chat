@@ -9,6 +9,7 @@
 
 <h:body>
 	<p:outputPanel id="pFriendsList">
+		<h:form>
 		<p:dataGrid
 			value="#{chat.contacts}"
 			var="contact"
@@ -30,6 +31,8 @@
 						<h:panelGroup>
 							<p:commandButton
 								id="btnChat"
+								action="#{chat.startConversation(contact)}"
+								update=":tvConversations"
 								icon="ui-icon-signal-diag" />
 							<p:tooltip
 								for="btnChat"
@@ -40,6 +43,7 @@
 			</p:column>
 
 		</p:dataGrid>
+		</h:form>
 	</p:outputPanel>
 
 </h:body>
