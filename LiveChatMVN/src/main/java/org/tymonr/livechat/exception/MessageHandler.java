@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
@@ -18,12 +19,25 @@ public class MessageHandler implements Serializable {
 			.getLogger(MessageHandler.class);
 
 	public static void error(String message, Throwable throwable) {
-		FacesContext context = FacesContext.getCurrentInstance();
-		FacesMessage facesMessage = new FacesMessage(message);
-		facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);
-		context.addMessage("errorGrowl", facesMessage);
+		facesContext().addMessage("errorGrowl",
+				newMessage(message, FacesMessage.SEVERITY_ERROR));
 		// context.validationFailed();
 		log.error(message, throwable);
 	}
 
+	public static void info(String message) {
+		facesContext().addMessage("errorGrowl",
+				newMessage(message, FacesMessage.SEVERITY_INFO));
+
+	}
+
+	private static FacesMessage newMessage(String message, Severity severity) {
+		FacesMessage facesMessage = new FacesMessage(message);
+		facesMessage.setSeverity(severity);
+		return facesMessage;
+	}
+
+	private static FacesContext facesContext() {
+		return FacesContext.getCurrentInstance();
+	}
 }

@@ -16,7 +16,12 @@
 </h:head>
 <h:body>
 
-	<h:form id="login">
+	<h:form id="signup">
+		<p:growl
+			for="errorGrowl"
+			showDetail="false"
+			sticky="true"
+			autoUpdate="true" />
 		<h:panelGrid
 			columns="3"
 			styleClass="login-controls">
@@ -25,30 +30,57 @@
 				value="Login:" />
 			<p:inputText
 				id="username"
+				value="#{signup.login}"
 				required="true" />
 			<p:message for="username" />
+
+			<p:outputLabel
+				for="firstname"
+				value="First name:" />
+			<p:inputText
+				id="firstname"
+				value="#{signup.firstname}"
+				required="false" />
+			<p:message for="firstname" />
+
+			<p:outputLabel
+				for="lastname"
+				value="Last name:" />
+			<p:inputText
+				id="lastname"
+				value="#{signup.lastname}"
+				required="false" />
+			<p:message for="lastname" />
 
 			<p:outputLabel
 				for="password"
 				value="Password:" />
 			<p:password
 				id="password"
+				value="#{signup.password}"
+				match="passwordConfirmation"
 				required="true" />
 			<p:message for="password" />
 
+			<p:outputLabel
+				for="passwordConfirmation"
+				value="Confirm:" />
+			<p:password
+				id="passwordConfirmation"
+				value="#{signup.confirmation}"
+				required="true" />
+			<p:message for="passwordConfirmation" />
+
+			<h:panelGroup />
 			<p:commandButton
 				process="@form"
 				update="@form"
-				ajax="false"
-				value="Login" />
-			<p:button
-				value="Signup"
-				outcome="signup.xhtml" />
+				action="#{signup.submit}"
+				value="Signup" />
 
 			<h:panelGroup
 				styleClass="error"
 				rendered="#{facesContext.validationFailed}">
-				#{shiroLoginFailure}
 			</h:panelGroup>
 		</h:panelGrid>
 	</h:form>
