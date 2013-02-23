@@ -1,3 +1,10 @@
 prevent opening multiple conversations to the same friend
 
 split private chats to different channels
+
+Conversation start/end indication, conversation_id passing
+between client and server looks a bit messy - It might be 
+a good idea to wrap all of this in some kind of custom
+protocol like classes,- 
+simple oo api to fill on the server
+and send to client as serialized to json?

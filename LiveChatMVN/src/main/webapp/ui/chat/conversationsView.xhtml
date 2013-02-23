@@ -62,6 +62,11 @@
 			icon="ui-icon-seek-next">
 		</p:commandButton>
 		<p:focus context="fMsg" />
+		
+		<p:remoteCommand
+			name="reload"
+			actionListener="#{chat.reloadData}"
+			update=":tvConversations" />
 	</h:form>
 
 	<p:socket
@@ -71,6 +76,11 @@
 
 	<script type="text/javascript">
 		function handleMessage(data) {
+			if(data === 'ENC' || data === 'EEC'){
+				reload();
+				return;
+			}
+			
 			/* TODO: refactor this... */
 			/* hacky way to send conversation id.
 				we use it to choose to which output panel

@@ -30,8 +30,11 @@ import org.tymonr.livechat.model.User;
 import org.tymonr.livechat.service.local.ChatRepository;
 import org.tymonr.livechat.session.Loggedin;
 
-/* TODO: When switched to JSF2.2 change scope to view to get rid
+/* TODO: 
+ * 1. When switched to JSF2.2 change scope to view to get rid
  * of data initialisation problems on get requests (mostly page refreshes).
+ * 
+ * 2. Break down to smaller classes, this one starts to feel a bit too fat.
  */
 /** Main chat controller */
 @Named
@@ -46,11 +49,30 @@ public class Chat implements Serializable {
 	 * chat is initialised (including shoutbox).
 	 */
 	private static final int MAX_MESSAGES = 50;
+
 	/** Title of shoutbox conversation tab */
 	private static final String SHOUTBOX = "Shoutbox";
+
 	/** Formatter for date put in front of each sent message */
 	private static final SimpleDateFormat dateFormatter = new SimpleDateFormat(
 			"HH:mm:ss");
+
+	private static final String DEFAULT_CHANNEL = "/chat";
+
+	/**
+	 * Markers to be send to client, indicating that a new conversation
+	 * started/ended/new message was sent
+	 */
+	private static final String EVENT_NEW_CONVERSATION = "ENC";
+	private static final String EVENT_END_CONVERSATION = "EEC";
+	private static final String EVEN_NEW_MESSAGE = "ENM";
+
+	/**
+	 * PrimeFaces server push context - WebSocket (if available) or
+	 * Comet/Long-pooling
+	 */
+	private final PushContext pushContext = PushContextFactory.getDefault()
+			.getPushContext();
 
 	@Inject
 	@Loggedin
@@ -72,6 +94,11 @@ public class Chat implements Serializable {
 
 	@PostConstruct
 	public void init() {
+		loadConversations();
+		log.trace("Chat bean - initialized");
+	}
+
+	private void loadConversations() {
 		conversations = new ArrayList<Conversation>();
 		Conversation shoutbox = new Conversation();
 		conversations.add(shoutbox);
@@ -86,7 +113,6 @@ public class Chat implements Serializable {
 			conversationMessageMap.put(conversation, list);
 		}
 
-		log.trace("Chat bean - initialized");
 	}
 
 	@PreDestroy
@@ -108,14 +134,12 @@ public class Chat implements Serializable {
 
 	public String sendMessage() {
 		try {
-			PushContext pushContext = PushContextFactory.getDefault()
-					.getPushContext();
 			Date date = new Date();
 			String escapedMessage = StringEscapeUtils.escapeHtml(message);
 
 			String pushContent = conversationId(activeConversation) + " "
 					+ formatedMessage(date, escapedMessage);
-			pushContext.push("/chat", pushContent);
+			pushContext.push(DEFAULT_CHANNEL, pushContent);
 
 			Message messageEntity = new Message();
 			messageEntity.setAuthor(user);
@@ -150,10 +174,16 @@ public class Chat implements Serializable {
 
 			conversation = (Conversation) chatRepository.save(conversation);
 			conversations.add(1, conversation);
+
+			pushContext.push(DEFAULT_CHANNEL, EVENT_NEW_CONVERSATION);
 		} catch (Exception e) {
 			MessageHandler.error("Error while starting new conversation", e);
 		}
 		return null;
+	}
+
+	public void reloadData() {
+		loadConversations();
 	}
 
 	/* event handlers */
@@ -164,6 +194,8 @@ public class Chat implements Serializable {
 			conversation.setTimeEnded(new Date());
 			chatRepository.save(conversation);
 			conversations.remove(conversation);
+
+			pushContext.push(DEFAULT_CHANNEL, EVENT_END_CONVERSATION);
 		} catch (Exception e) {
 			MessageHandler.error("Error while ending conversation", e);
 		}
