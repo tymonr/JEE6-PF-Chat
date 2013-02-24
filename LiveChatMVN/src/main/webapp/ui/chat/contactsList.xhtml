@@ -14,23 +14,18 @@
 				value="#{chat.contacts}"
 				var="contact"
 				columns="1"
-				rows="3"
+				rows="5"
 				paginator="true"
 				paginatorPosition="bottom"
 				paginatorTemplate="{PreviousPageLink} {NextPageLink}">
+				
+				<f:facet name="header">Friends list</f:facet>
 
 				<p:column>
-					<p:panel header="#{contact.other.username}">
-						<h:panelGrid columns="2">
-							<h:outputText
-								value="#{contact.other.status}"
-								styleClass="status-user-#{contact.other.username}" />
-							<ui:remove>
-								<h:panelGroup>
-								</h:panelGroup>
-							</ui:remove>
-
+					<p:panel>
+						<f:facet name="header">
 							<h:panelGroup>
+								<h:outputText value="#{contact.other.username}" />
 								<p:commandButton
 									id="btnChat"
 									styleClass="chat-button"
@@ -41,7 +36,10 @@
 									for="btnChat"
 									value="Chat" />
 							</h:panelGroup>
-						</h:panelGrid>
+						</f:facet>
+						<h:outputText
+							value="#{contact.other.status}"
+							styleClass="status-user-#{contact.other.username} status-text" />
 					</p:panel>
 				</p:column>
 
