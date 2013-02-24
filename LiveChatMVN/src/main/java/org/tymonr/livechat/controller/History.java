@@ -11,17 +11,24 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tymonr.livechat.exception.MessageHandler;
-import org.tymonr.livechat.mode.filter.ConversationFilter;
 import org.tymonr.livechat.model.Contact;
 import org.tymonr.livechat.model.Conversation;
 import org.tymonr.livechat.model.Message;
 import org.tymonr.livechat.model.User;
+import org.tymonr.livechat.model.filter.ConversationFilter;
 import org.tymonr.livechat.service.local.ChatRepository;
 import org.tymonr.livechat.session.Loggedin;
 
-/* TODO: see Chat.java
- /**
+/* TODO: 
+ * 1. see Chat.java
+ * 2. to viewScope && cleanup after dialog close
+ */
+/**
  * Conversations history controller
+ */
+/**
+ * Controller for loggedin user conversations history.
+ * 
  */
 @Named
 @SessionScoped
@@ -62,6 +69,13 @@ public class History implements Serializable {
 		return null;
 	}
 
+	/**
+	 * Load messages for given conversation, Invoked to show messages of
+	 * selected conversation.
+	 * 
+	 * @param conversation
+	 * @return
+	 */
 	public String showMessages(Conversation conversation) {
 		try {
 			messages = chatRepository.loadConversationMessages(conversation,

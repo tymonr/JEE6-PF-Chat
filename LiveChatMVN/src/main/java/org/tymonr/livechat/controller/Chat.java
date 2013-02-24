@@ -116,6 +116,12 @@ public class Chat implements Serializable {
 
 	/* actions */
 
+	/**
+	 * Remove contact from loggedin user friends list
+	 * 
+	 * @param contact
+	 * @return
+	 */
 	public String removeContact(Contact contact) {
 		try {
 			chatRepository.remove(contact);
@@ -126,6 +132,11 @@ public class Chat implements Serializable {
 		return null;
 	}
 
+	/**
+	 * Send message action
+	 * 
+	 * @return
+	 */
 	public String sendMessage() {
 		try {
 			Date date = new Date();
@@ -161,6 +172,12 @@ public class Chat implements Serializable {
 		return null;
 	}
 
+	/**
+	 * Start conversation action
+	 * 
+	 * @param contact
+	 * @return
+	 */
 	public String startConversation(Contact contact) {
 		try {
 			log.debug("Starting conversation with "
@@ -188,6 +205,11 @@ public class Chat implements Serializable {
 
 	/* event handlers */
 
+	/**
+	 * Event when conversation tab gets closed.
+	 * 
+	 * @param event
+	 */
 	public void endConversation(TabCloseEvent event) {
 		try {
 			Conversation conversation = (Conversation) event.getData();
@@ -203,11 +225,19 @@ public class Chat implements Serializable {
 		}
 	}
 
+	/**
+	 * Event when user changes active tab in the conversations tabView.
+	 * 
+	 * @param event
+	 */
 	public void switchActiveConversation(TabChangeEvent event) {
 		activeConversation = (Conversation) event.getData();
 		log.debug("switching active conversation to " + activeConversation);
 	}
 
+	/**
+	 * Event when user edits status and accepts the change.
+	 */
 	public void statusChanged() {
 		log.debug("Status was changed to: " + status);
 		try {
@@ -226,10 +256,23 @@ public class Chat implements Serializable {
 
 	/* helper methods */
 
+	/**
+	 * Get messages of the given conversation
+	 * 
+	 * @param conversation
+	 * @return
+	 */
 	public List<Message> messagesOfConversation(Conversation conversation) {
 		return conversationMessageMap.get(conversation);
 	}
 
+	/**
+	 * Helper method the set the conversation tab title, different on the
+	 * initiating side and receiving side
+	 * 
+	 * @param conversation
+	 * @return
+	 */
 	public String conversationTitle(Conversation conversation) {
 		if (conversation.getId() == null) {
 			return SHOUTBOX;
@@ -243,6 +286,13 @@ public class Chat implements Serializable {
 		return title;
 	}
 
+	/**
+	 * Can the given conversation tab be closed? As of now only shoutbox can't
+	 * be closed.
+	 * 
+	 * @param conversation
+	 * @return
+	 */
 	public boolean isTabClosable(Conversation conversation) {
 		if (conversation.getId() == null) {
 			return false;
@@ -254,6 +304,14 @@ public class Chat implements Serializable {
 		return dateFormatter.format(date);
 	}
 
+	/**
+	 * Id of conversation as string, although shoutbox does not have id as it is
+	 * not saved to DB as Conversation entity this method still returns "0" for
+	 * it. Method used to distinguish conversations by id on the client side.
+	 * 
+	 * @param conversation
+	 * @return
+	 */
 	public String conversationId(Conversation conversation) {
 		if (conversation == null) {
 			return null;
@@ -262,6 +320,9 @@ public class Chat implements Serializable {
 				.toString();
 	}
 
+	/**
+	 * Load all open conversations for loggedin user, newest first
+	 */
 	private void loadActiveConversations() {
 		try {
 			List<Conversation> list = chatRepository
@@ -272,6 +333,7 @@ public class Chat implements Serializable {
 		}
 	}
 
+	/** Initialise conversations of loggedin user */
 	private void loadConversations() {
 		conversations = new ArrayList<Conversation>();
 		Conversation shoutbox = new Conversation();

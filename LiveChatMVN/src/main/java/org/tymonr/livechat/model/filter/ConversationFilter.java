@@ -1,4 +1,4 @@
-package org.tymonr.livechat.mode.filter;
+package org.tymonr.livechat.model.filter;
 
 import org.tymonr.livechat.model.Conversation;
 

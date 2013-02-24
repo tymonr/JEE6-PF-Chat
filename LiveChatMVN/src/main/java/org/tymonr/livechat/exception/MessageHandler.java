@@ -2,17 +2,17 @@ package org.tymonr.livechat.exception;
 
 import java.io.Serializable;
 
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
-import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Named
-@SessionScoped
+/**
+ * Single class to show generic error messages to the user and push full
+ * stacktrace to the log.
+ */
 public class MessageHandler implements Serializable {
 	private static final long serialVersionUID = -2102566098477162729L;
 	private static final Logger log = LoggerFactory

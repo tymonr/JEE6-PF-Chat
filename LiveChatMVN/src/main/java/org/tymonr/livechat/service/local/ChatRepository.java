@@ -6,12 +6,15 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
-import org.tymonr.livechat.mode.filter.ConversationFilter;
 import org.tymonr.livechat.model.Conversation;
 import org.tymonr.livechat.model.Message;
 import org.tymonr.livechat.model.User;
+import org.tymonr.livechat.model.filter.ConversationFilter;
 import org.tymonr.livechat.model.filter.UserFilter;
 
+/**
+ * Service class handling chat data.
+ */
 @Stateless
 public class ChatRepository extends LocalService {
 

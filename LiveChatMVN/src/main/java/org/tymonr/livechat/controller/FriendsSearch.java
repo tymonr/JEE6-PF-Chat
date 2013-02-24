@@ -17,7 +17,9 @@ import org.tymonr.livechat.model.filter.UserFilter;
 import org.tymonr.livechat.service.local.ChatRepository;
 import org.tymonr.livechat.session.Loggedin;
 
-/* TODO: migrate to JSF2.2, change to ViewScope */
+/* TODO: 
+ * 1. migrate to JSF2.2, change to ViewScope
+ * 2. see Chat.java */
 @Named
 @SessionScoped
 public class FriendsSearch implements Serializable {
@@ -36,7 +38,7 @@ public class FriendsSearch implements Serializable {
 	public FriendsSearch() {
 	}
 
-	/** Search actions */
+	/** Search action */
 	public String search() {
 		try {
 			users = chatRepository.findUsers(filter, 0, Integer.MAX_VALUE);
@@ -47,6 +49,12 @@ public class FriendsSearch implements Serializable {
 		return null;
 	}
 
+	/**
+	 * Add new contact for loggedin user
+	 * 
+	 * @param other
+	 * @return
+	 */
 	public String addContact(User other) {
 		try {
 			Contact contact = new Contact();
@@ -61,6 +69,11 @@ public class FriendsSearch implements Serializable {
 		return null;
 	}
 
+	/**
+	 * Is given user already in loggedin user contacts ?
+	 * 
+	 * @param other
+	 */
 	public boolean isAlreadyAdded(User other) {
 		if (user.getId().equals(other.getId())) {
 			/* loggedin user can see himself on the list but can't add */

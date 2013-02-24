@@ -3,3 +3,8 @@ String externalization, internationalization
 minify html & JS code
 
 lazy load data in dataTables
+
+add services/daos, spread functions in
+current ones to the new as current seem
+to be doing to much and not only what 
+their names suggest.

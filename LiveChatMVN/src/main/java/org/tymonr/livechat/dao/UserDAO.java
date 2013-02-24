@@ -11,10 +11,10 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang.StringUtils;
-import org.tymonr.livechat.mode.filter.ConversationFilter;
 import org.tymonr.livechat.model.Conversation;
 import org.tymonr.livechat.model.Message;
 import org.tymonr.livechat.model.User;
+import org.tymonr.livechat.model.filter.ConversationFilter;
 import org.tymonr.livechat.model.filter.UserFilter;
 
 /* TODO: 
@@ -112,6 +112,7 @@ public class UserDAO extends BaseDAO {
 		return result;
 	}
 
+	@Deprecated
 	public List<Message> loadShoutboxMessages(int numberOfMessages) {
 		StringBuilder jpql = new StringBuilder("select m from "
 				+ Message.class.getCanonicalName() + " m ");

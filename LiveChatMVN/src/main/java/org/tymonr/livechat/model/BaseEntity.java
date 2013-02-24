@@ -7,10 +7,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+/**
+ * Base class for all entities in the app.
+ * 
+ */
 @MappedSuperclass
-public class BaseEntity implements Serializable{
+public class BaseEntity implements Serializable {
 	private static final long serialVersionUID = -5987552207690436728L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -47,8 +51,5 @@ public class BaseEntity implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
-	
 
 }
