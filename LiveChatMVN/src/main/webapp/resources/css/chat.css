@@ -1,0 +1,9 @@
+
+.chat-button .ui-button-text{
+	padding: 0.4em;
+	line-height: 0;
+}
+
+.ui-panel-titlebar{
+	padding: 0;
+}
