@@ -77,24 +77,40 @@
 
 	<script type="text/javascript">
 		function handleMessage(data) {
-			if(data === 'ENC' || data === 'EEC'){
+			console.log(data);
+			var msg = eval("(" + data + ")");
+			console.log(msg.event);
+			
+			if(msg.event === 'ENC' || msg.event === 'EEC'){
 				reload();
 				return;
+			}else if(msg.event === 'ESC'){
+				var chatContent = $('.conversationNo0');
+				var span = '<span class="message-status">';
+				span += msg.user;
+				span += ' changed status to ';
+				span += '"' + msg.status + '"';
+				span += '</span> <br />';
+				chatContent.append(span);
+				chatContent.scrollTop(99999);
+				
+				var status = $('.status-user-' + msg.user);
+				status.text(msg.status);
+				
+				return;
+			}else if(msg.event === 'ENM'){
+				console.log('message: ' + msg.content);
+				var chatContent = $('.conversationNo' + msg.conversationId);
+				
+				chatContent.append('<span class="message-date">[' + msg.date + ']</span> ');
+				chatContent.append('<span class="message-author">' + msg.user + '</span>: ');
+				chatContent.append('<span class="message-content">' + msg.content + '</span>');
+				chatContent.append('<br />');
+				
+				chatContent.scrollTop(99999);
+				PrimeFaces.focus('fMsg:itMessage');
+				return;
 			}
-			
-			/* TODO: refactor this... */
-			/* hacky way to send conversation id.
-				we use it to choose to which output panel
-				message we got should be appended */
-			var splitIndex = data.search(' ');
-			var conversationId = data.substring(0, splitIndex);
-			var message = data.substring(splitIndex+1, data.length);
-			
-			var chatContent = $('.conversationNo'+conversationId);
-			chatContent.append(message + '<br />');
-
-			chatContent.scrollTop(99999);
-			PrimeFaces.focus('fMsg:itMessage');
 		}
 	</script>
 

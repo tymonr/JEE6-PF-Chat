@@ -30,6 +30,7 @@ import org.tymonr.livechat.model.Message;
 import org.tymonr.livechat.model.User;
 import org.tymonr.livechat.service.local.ChatRepository;
 import org.tymonr.livechat.session.Loggedin;
+import org.tymonr.livechat.utils.json.JSONBuilder;
 
 /* TODO: 
  * 1. When switched to JSF2.2 change scope to view to get rid
@@ -66,6 +67,7 @@ public class Chat implements Serializable {
 	 */
 	private static final String EVENT_NEW_CONVERSATION = "ENC";
 	private static final String EVENT_END_CONVERSATION = "EEC";
+	private static final String EVENT_STATUS_CHANGE = "ESC";
 	private static final String EVEN_NEW_MESSAGE = "ENM";
 
 	/**
@@ -107,23 +109,6 @@ public class Chat implements Serializable {
 		log.trace("Chat bean - initialized");
 	}
 
-	private void loadConversations() {
-		conversations = new ArrayList<Conversation>();
-		Conversation shoutbox = new Conversation();
-		conversations.add(shoutbox);
-		loadActiveConversations();
-		activeConversation = shoutbox;
-
-		conversationMessageMap = new HashMap<Conversation, List<Message>>();
-		for (Conversation conversation : conversations) {
-			List<Message> list = chatRepository.loadConversationMessages(
-					conversation, MAX_MESSAGES);
-			Collections.reverse(list);
-			conversationMessageMap.put(conversation, list);
-		}
-
-	}
-
 	@PreDestroy
 	public void dispose() {
 		log.trace("Chat bean - disposed");
@@ -146,9 +131,13 @@ public class Chat implements Serializable {
 			Date date = new Date();
 			String escapedMessage = StringEscapeUtils.escapeHtml(message);
 
-			String pushContent = conversationId(activeConversation) + " "
-					+ formatedMessage(date, escapedMessage);
-			pushContext.push(DEFAULT_CHANNEL, pushContent);
+			JSONBuilder builder = new JSONBuilder();
+			builder.add("event", EVEN_NEW_MESSAGE);
+			builder.add("content", escapedMessage);
+			builder.add("date", formatedDate(date));
+			builder.add("user", user.getUsername());
+			builder.add("conversationId", conversationId(activeConversation));
+			pushContext.push(DEFAULT_CHANNEL, builder.toString());
 
 			Message messageEntity = new Message();
 			messageEntity.setAuthor(user);
@@ -184,7 +173,9 @@ public class Chat implements Serializable {
 			conversation = (Conversation) chatRepository.save(conversation);
 			conversations.add(1, conversation);
 
-			pushContext.push(DEFAULT_CHANNEL, EVENT_NEW_CONVERSATION);
+			JSONBuilder builder = new JSONBuilder();
+			builder.add("event", EVENT_NEW_CONVERSATION);
+			pushContext.push(DEFAULT_CHANNEL, builder.toString());
 		} catch (Exception e) {
 			MessageHandler.error("Error while starting new conversation", e);
 		}
@@ -204,7 +195,9 @@ public class Chat implements Serializable {
 			chatRepository.save(conversation);
 			conversations.remove(conversation);
 
-			pushContext.push(DEFAULT_CHANNEL, EVENT_END_CONVERSATION);
+			JSONBuilder builder = new JSONBuilder();
+			builder.add("event", EVENT_END_CONVERSATION);
+			pushContext.push(DEFAULT_CHANNEL, builder.toString());
 		} catch (Exception e) {
 			MessageHandler.error("Error while ending conversation", e);
 		}
@@ -221,13 +214,11 @@ public class Chat implements Serializable {
 			user.setStatus(status);
 			chatRepository.save(user);
 
-			StringBuilder message = new StringBuilder("0 ");
-			message.append("<span class=\"message-status\">");
-			message.append(user.getUsername());
-			message.append(" changed status to \"");
-			message.append(status + '"');
-			message.append("</span>");
-			pushContext.push(DEFAULT_CHANNEL, message.toString());
+			JSONBuilder builder = new JSONBuilder();
+			builder.add("event", EVENT_STATUS_CHANGE);
+			builder.add("user", user.getUsername());
+			builder.add("status", status);
+			pushContext.push(DEFAULT_CHANNEL, builder.toString());
 		} catch (Exception e) {
 			MessageHandler.error("Error while changing status", e);
 		}
@@ -271,22 +262,6 @@ public class Chat implements Serializable {
 				.toString();
 	}
 
-	private String formatedMessage(Date date, String message) {
-		StringBuilder msg = new StringBuilder();
-		msg.append("<span class=\"message-date\">");
-		msg.append("[" + dateFormatter.format(date) + "] ");
-		msg.append("</span>");
-
-		msg.append("<span class=\"message-author\">");
-		msg.append(user.getUsername());
-		msg.append("</span>");
-		msg.append(": ");
-		msg.append("<span class=\"message-content\">");
-		msg.append(message);
-		msg.append("</span>");
-		return msg.toString();
-	}
-
 	private void loadActiveConversations() {
 		try {
 			List<Conversation> list = chatRepository
@@ -295,6 +270,23 @@ public class Chat implements Serializable {
 		} catch (Exception e) {
 			MessageHandler.error("Error while loading active conversations", e);
 		}
+	}
+
+	private void loadConversations() {
+		conversations = new ArrayList<Conversation>();
+		Conversation shoutbox = new Conversation();
+		conversations.add(shoutbox);
+		loadActiveConversations();
+		activeConversation = shoutbox;
+
+		conversationMessageMap = new HashMap<Conversation, List<Message>>();
+		for (Conversation conversation : conversations) {
+			List<Message> list = chatRepository.loadConversationMessages(
+					conversation, MAX_MESSAGES);
+			Collections.reverse(list);
+			conversationMessageMap.put(conversation, list);
+		}
+
 	}
 
 	/* get / set */

@@ -10,39 +10,41 @@
 <h:body>
 	<p:outputPanel id="pFriendsList">
 		<h:form>
-		<p:dataGrid
-			value="#{chat.contacts}"
-			var="contact"
-			columns="1"
-			rows="3"
-			paginator="true"
-			paginatorPosition="bottom"
-			paginatorTemplate="{PreviousPageLink} {NextPageLink}">
+			<p:dataGrid
+				value="#{chat.contacts}"
+				var="contact"
+				columns="1"
+				rows="3"
+				paginator="true"
+				paginatorPosition="bottom"
+				paginatorTemplate="{PreviousPageLink} {NextPageLink}">
 
-			<p:column>
-				<p:panel header="#{contact.other.username}">
-					<h:panelGrid columns="2">
-						<h:outputText value="status" />
-						<ui:remove>
+				<p:column>
+					<p:panel header="#{contact.other.username}">
+						<h:panelGrid columns="2">
+							<h:outputText
+								value="#{contact.other.status}"
+								styleClass="status-user-#{contact.other.username}" />
+							<ui:remove>
+								<h:panelGroup>
+								</h:panelGroup>
+							</ui:remove>
+
 							<h:panelGroup>
+								<p:commandButton
+									id="btnChat"
+									action="#{chat.startConversation(contact)}"
+									update=":tvConversations"
+									icon="ui-icon-signal-diag" />
+								<p:tooltip
+									for="btnChat"
+									value="Chat" />
 							</h:panelGroup>
-						</ui:remove>
+						</h:panelGrid>
+					</p:panel>
+				</p:column>
 
-						<h:panelGroup>
-							<p:commandButton
-								id="btnChat"
-								action="#{chat.startConversation(contact)}"
-								update=":tvConversations"
-								icon="ui-icon-signal-diag" />
-							<p:tooltip
-								for="btnChat"
-								value="Chat" />
-						</h:panelGroup>
-					</h:panelGrid>
-				</p:panel>
-			</p:column>
-
-		</p:dataGrid>
+			</p:dataGrid>
 		</h:form>
 	</p:outputPanel>
 
