@@ -1,5 +1,7 @@
 package org.tymonr.livechat.dao;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,12 +11,11 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 import org.apache.commons.lang.StringUtils;
+import org.tymonr.livechat.mode.filter.ConversationFilter;
 import org.tymonr.livechat.model.Conversation;
 import org.tymonr.livechat.model.Message;
 import org.tymonr.livechat.model.User;
 import org.tymonr.livechat.model.filter.UserFilter;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /* TODO: 
  * switch to criteria api and hibernates query by example ? 
@@ -180,6 +181,45 @@ public class UserDAO extends BaseDAO {
 			result = query.getResultList();
 		} catch (NoResultException nre) {
 			result = new ArrayList<Message>();
+		}
+		return result;
+	}
+
+	public List<Conversation> loadConversations(ConversationFilter filter,
+			int startIndex, int maxResults) {
+		StringBuilder jpql = new StringBuilder("select c from "
+				+ Conversation.class.getCanonicalName() + " c ");
+		jpql.append("join fetch c.owner ");
+		jpql.append("join fetch c.receiver ");
+		if (filter != null) {
+			jpql.append("where 1=1 ");
+			if (filter.getOwner() != null) {
+				jpql.append("and c.owner = :owner ");
+			}
+			if (filter.getReceiver() != null) {
+				jpql.append("and c.receiver = :receiver ");
+			}
+		}
+		jpql.append("order by c.timeStarted desc ");
+		TypedQuery<Conversation> query = entityManager.createQuery(
+				jpql.toString(), Conversation.class);
+		if (filter != null) {
+			if (filter.getOwner() != null) {
+				query.setParameter("owner", filter.getOwner());
+			}
+			if (filter.getReceiver() != null) {
+				query.setParameter("receiver", filter.getReceiver());
+			}
+		}
+
+		query.setFirstResult(startIndex);
+		query.setMaxResults(maxResults);
+
+		List<Conversation> result;
+		try {
+			result = query.getResultList();
+		} catch (NoResultException nre) {
+			result = new ArrayList<Conversation>();
 		}
 		return result;
 	}

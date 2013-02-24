@@ -154,6 +154,9 @@
 			<p:dataTable
 				id="dtEditContacts"
 				value="#{chat.contacts}"
+				paginator="true"
+				rows="8"
+				paginatorPosition="bottom"
 				var="contact">
 
 				<p:column headerText="Nick">
@@ -179,6 +182,16 @@
 						for="btnRemoveContact"
 						value="Remove this user from your conntacts list" />
 
+					<p:commandButton
+						id="btnShowHistory"
+						action="#{history.showConversationsHistory(contact)}"
+						update=":dConversationsHistory"
+						oncomplete="editContactsDlg.hide();conversationsHistoryDlg.show();"
+						icon="ui-icon-comment" />
+					<p:tooltip
+						for="btnShowHistory"
+						value="Show conversation history" />
+
 					<ui:remove>
 						<!-- TODO -->
 						<p:commandButton
@@ -190,6 +203,69 @@
 					</ui:remove>
 				</p:column>
 			</p:dataTable>
+		</h:form>
+	</p:dialog>
+
+	<p:dialog
+		id="dConversationsHistory"
+		header="Conversations history"
+		width="900"
+		minWidth="900"
+		widgetVar="conversationsHistoryDlg">
+
+		<h:form>
+			<h:panelGrid columns="2">
+				<p:dataTable
+					paginator="true"
+					rows="8"
+					paginatorPosition="bottom"
+					value="#{history.conversations}"
+					var="conversation">
+					<p:column headerText="Started">
+						#{conversation.owner.username}
+					</p:column>
+
+					<p:column headerText="Receiver">
+						#{conversation.receiver.username}
+					</p:column>
+
+					<p:column headerText="Time started">
+						#{conversation.timeStarted}
+					</p:column>
+
+					<p:column>
+						<p:commandButton
+							id="btnShowMessages"
+							icon="ui-icon-search"
+							action="#{history.showMessages(conversation)}"
+							update="@form" />
+					</p:column>
+				</p:dataTable>
+
+				<p:outputPanel
+					id="opMessages"
+					layout="block"
+					style="width:400px"
+					
+					styleClass="ui-corner-all ui-widget-content message-panel">
+	
+					<ui:repeat
+						var="message"
+						value="#{history.messages}">
+						<h:outputText
+							styleClass="message-date"
+							value="[#{chat.formatedDate(message.timeSent)}] " />
+						<h:outputText
+							styleClass="message-author"
+							value="#{message.author.username}: " />
+						<h:outputText
+							styleClass="message-content"
+							value="#{message.content}" />
+						<br />
+					</ui:repeat>
+					
+				</p:outputPanel>
+			</h:panelGrid>
 		</h:form>
 	</p:dialog>
 

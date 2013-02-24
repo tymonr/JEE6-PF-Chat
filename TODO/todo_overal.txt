@@ -1,3 +1,5 @@
 String externalization, internationalization
 
 minify html & JS code
+
+lazy load data in dataTables

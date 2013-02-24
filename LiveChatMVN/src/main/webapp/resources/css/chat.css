@@ -1,21 +1,20 @@
-
-.status-text{
+.status-text {
 	font-size: 0.7em;
 }
 
-.chat-button{
+.chat-button {
 	float: right;
 }
 
-.chat-button .ui-button-text{
+.chat-button .ui-button-text {
 	padding: 0.4em;
 	line-height: 0;
 }
 
-.ui-panel .ui-panel-titlebar{
+.ui-panel .ui-panel-titlebar {
 	padding: 0;
 }
 
-.ui-panel .ui-panel-content{
+.ui-panel .ui-panel-content {
 	padding: 0.2em;
 }
